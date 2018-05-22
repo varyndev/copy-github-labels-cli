@@ -14,6 +14,7 @@ var cli = meow({
     '',
     'Options',
     '  -d           Dry run, don\'t actually copy anything' ,
+    '  -f           Force update from source if exists in destination' ,
     '  -t, --token  Token to authenticate with GitHub API' ,
     '',
     'Examples',
@@ -21,7 +22,7 @@ var cli = meow({
   ]
 }, {
   boolean: [
-    'd'
+    'd', 'f'
   ],
   alias: {
     t: 'token'
@@ -40,7 +41,8 @@ source = cli.input[0];
 destination = cli.input[1];
 
 var options = {
-  dryRun: cli.flags.d
+  dryRun: cli.flags.d,
+  force: cli.flags.f
 };
 var copyGitHubLabels = require('copy-github-labels')(options);
 
@@ -51,6 +53,9 @@ copyGitHubLabels.authenticate({
 
 if(cli.flags.d){
   console.log(chalk.yellow('Dry run, no labels are copied for real:'));
+}
+if(cli.flags.f){
+  console.log(chalk.yellow('Overwriting matching labels:'));
 }
 
 
@@ -81,6 +86,9 @@ copyGitHubLabels.copy(source, destination, function (err, label){
 
   if(label && label.name){
     labelName = label.name;
+    if (label.description) {
+      labelName += '(' + label.description + ')';
+    }
   }
 
   count++;
