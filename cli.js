@@ -81,13 +81,16 @@ if(cli.flags.f){
 
 copyGitHubLabels.copy(source, destination, function (err, label){
 
-  var error = JSON.parse(err);
+  var error = typeof err === 'object' ? err : JSON.parse(err);
   var labelName = 'Unknown label';
 
   if(label && label.name){
     labelName = label.name;
     if (label.description) {
       labelName += '(' + label.description + ')';
+    }
+    if (label.force) {
+      labelName += ' updated';
     }
   }
 
