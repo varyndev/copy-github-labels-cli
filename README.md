@@ -58,6 +58,12 @@ MIT
 
 ## Change log
 
+### 1.1.0
+
+- added `-f` force option to overwrite label if exists.
+- improve error to show label in error.
+- copies description.
+
 ### 1.0.0
 
 - Released production version
